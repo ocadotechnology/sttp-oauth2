@@ -57,12 +57,12 @@ ThisBuild / githubWorkflowEnv ++= List("PGP_PASSPHRASE", "PGP_SECRET", "SONATYPE
 
 val Versions = new {
   val catsCore = "2.6.1"
-  val catsEffect = "2.3.1"
+  val catsEffect = "3.1.1"
   val circe = "0.13.0"
   val kindProjector = "0.13.0"
   val monix = "3.4.0"
   val scalaTest = "3.2.9"
-  val sttp = "3.2.3"
+  val sttp = "3.3.5"
   val refined = "0.9.25"
 }
 
@@ -77,7 +77,7 @@ val testDependencies = Seq(
 ).map(_ % Test)
 
 val mimaSettings =
-  mimaPreviousArtifacts := previousStableVersion.value.map(organization.value %% moduleName.value % _).toSet
+  mimaPreviousArtifacts := Set() // previousStableVersion.value.map(organization.value %% moduleName.value % _).toSet
 
 lazy val oauth2 = project.settings(
   name := "sttp-oauth2",
@@ -115,7 +115,9 @@ lazy val `oauth2-backend-cats` = project
   .settings(
     name := "sttp-oauth2-backend-cats",
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect" % Versions.catsEffect,
+      "org.typelevel" %% "cats-effect-std" % Versions.catsEffect,
+      "org.typelevel" %% "cats-effect" % Versions.catsEffect % Test,
+      "org.typelevel" %% "cats-effect-testkit" % Versions.catsEffect % Test,
       "com.softwaremill.sttp.client3" %% "async-http-client-backend-cats" % Versions.sttp % Test
     ) ++ plugins ++ testDependencies,
     mimaSettings
