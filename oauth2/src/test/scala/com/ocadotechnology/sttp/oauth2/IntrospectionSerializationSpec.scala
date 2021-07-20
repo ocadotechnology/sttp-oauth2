@@ -13,7 +13,7 @@ class IntrospectionSerializationSpec extends AnyWordSpec with Matchers with Opti
   "Token" should {
     "deserialize token introspection response" in {
       val clientId = "Client ID"
-      val domain = "zoo"
+      val domain = "mock"
       val exp = Instant.EPOCH
       val active = false
       val authorities = List("aaa", "bbb")
@@ -31,7 +31,15 @@ class IntrospectionSerializationSpec extends AnyWordSpec with Matchers with Opti
           }"""
 
       json.as[TokenIntrospectionResponse] shouldBe Right(
-        TokenIntrospectionResponse(clientId, domain, exp, active, authorities, Scope.of(scope).value, tokenType)
+        TokenIntrospectionResponse(
+          active = active,
+          clientId = Some(clientId),
+          domain = Some(domain),
+          exp= Some(exp),
+          authorities = Some(authorities),
+          scope = Some(Scope.of(scope).value),
+          tokenType = Some(tokenType)
+        )
       )
 
     }
